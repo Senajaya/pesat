@@ -217,9 +217,12 @@ export function KeuanganPage() {
     jenis === "PEMASUKAN" ? KATEGORI_PEMASUKAN : KATEGORI_PENGELUARAN;
 
   return (
-    <div className="p-4 space-y-4">
+    <div
+      className="min-h-dvh p-4 space-y-4 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url('/keuangan.jpg')` }}
+    >
       {/* Header */}
-      <header className="flex items-center justify-between pt-2">
+      <header className="flex items-center justify-between pt-2 rounded-2xl border border-white/80 bg-white/88 backdrop-blur-md px-3.5 py-2.5 shadow-xs">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
             PESAT GO!
@@ -241,7 +244,7 @@ export function KeuanganPage() {
       </header>
 
       {/* Kartu Ringkasan Saldo */}
-      <section className="rounded-2xl bg-emerald-700 p-4 text-white shadow-xs space-y-3">
+      <section className="rounded-2xl bg-emerald-700/95 backdrop-blur-xs p-4 text-white shadow-xs space-y-3 border border-emerald-500/50">
         <div>
           <p className="text-xs text-emerald-100">Saldo Bersih</p>
           <p className="text-2xl font-bold mt-0.5">
@@ -265,14 +268,14 @@ export function KeuanganPage() {
       </section>
 
       {feedback && (
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-xs font-medium text-emerald-800">
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50/95 p-3 text-xs font-medium text-emerald-800">
           {feedback}
         </div>
       )}
       {error && (
         <div
           role="alert"
-          className="rounded-2xl border border-red-200 bg-red-50 p-3 text-xs text-red-700"
+          className="rounded-2xl border border-red-200 bg-red-50/95 p-3 text-xs text-red-700"
         >
           {error}
         </div>
@@ -282,7 +285,7 @@ export function KeuanganPage() {
       {showForm && (
         <form
           onSubmit={handleSubmit}
-          className="rounded-2xl border border-stone-200 bg-white p-4 space-y-3 shadow-xs"
+          className="rounded-2xl border border-white/85 bg-white/95 backdrop-blur-md p-4 space-y-3 shadow-xs"
         >
           <h2 className="text-sm font-bold text-stone-900">
             Tambah Transaksi
@@ -415,7 +418,7 @@ export function KeuanganPage() {
             className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
               filterJenis === tab.key
                 ? "bg-emerald-700 text-white"
-                : "bg-white text-stone-600 border border-stone-200 hover:bg-stone-100"
+                : "bg-white/90 text-stone-600 border border-white/80 hover:bg-white"
             }`}
           >
             {tab.label}
@@ -425,11 +428,11 @@ export function KeuanganPage() {
 
       {/* Riwayat Transaksi */}
       {loading ? (
-        <div className="rounded-2xl bg-white p-6 text-center text-xs text-stone-500 border border-stone-200/80">
+        <div className="rounded-2xl bg-white/92 backdrop-blur-xs p-6 text-center text-xs text-stone-500 border border-white/80">
           Memuat riwayat transaksi...
         </div>
       ) : transaksi.length === 0 ? (
-        <div className="rounded-2xl bg-white p-6 text-center border border-stone-200/80 space-y-1">
+        <div className="rounded-2xl bg-white/92 backdrop-blur-xs p-6 text-center border border-white/80 space-y-1">
           <p className="text-sm font-semibold text-stone-800">
             Belum ada transaksi
           </p>
@@ -444,7 +447,7 @@ export function KeuanganPage() {
             return (
               <div
                 key={item.id}
-                className="rounded-2xl border border-stone-200/80 bg-white p-3.5 space-y-2"
+                className="rounded-2xl border border-white/85 bg-white/92 backdrop-blur-xs p-3.5 space-y-2 shadow-xs"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -471,14 +474,14 @@ export function KeuanganPage() {
                   <button
                     type="button"
                     onClick={() => openEditModal(item)}
-                    className="rounded-lg border border-stone-200 px-2.5 py-1 text-[11px] font-medium text-stone-700 hover:bg-stone-100"
+                    className="rounded-lg border border-stone-200 bg-white px-2.5 py-1 text-[11px] font-medium text-stone-700 hover:bg-stone-100"
                   >
                     Edit
                   </button>
                   <button
                     type="button"
                     onClick={() => handleDelete(item)}
-                    className="rounded-lg border border-stone-200 px-2.5 py-1 text-[11px] font-medium text-stone-500 hover:bg-red-50 hover:text-red-700 hover:border-red-200"
+                    className="rounded-lg border border-stone-200 bg-white px-2.5 py-1 text-[11px] font-medium text-stone-500 hover:bg-red-50 hover:text-red-700 hover:border-red-200"
                   >
                     Hapus
                   </button>

@@ -155,8 +155,11 @@ export function UserPage() {
   const displayEmail = profil?.email || user?.email || "-";
 
   return (
-    <div className="p-4 space-y-4">
-      <header className="pt-2">
+    <div
+      className="min-h-dvh p-4 space-y-4 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url('/user.jpg')` }}
+    >
+      <header className="pt-2 rounded-2xl border border-white/80 bg-white/88 backdrop-blur-md px-3.5 py-2.5 shadow-xs">
         <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
           PESAT GO!
         </p>
@@ -164,7 +167,7 @@ export function UserPage() {
       </header>
 
       {feedback && (
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-xs font-medium text-emerald-800">
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50/95 p-3 text-xs font-medium text-emerald-800">
           {feedback}
         </div>
       )}
@@ -172,14 +175,14 @@ export function UserPage() {
       {error && (
         <div
           role="alert"
-          className="rounded-2xl border border-red-200 bg-red-50 p-3 text-xs text-red-700"
+          className="rounded-2xl border border-red-200 bg-red-50/95 p-3 text-xs text-red-700"
         >
           {error}
         </div>
       )}
 
       {/* Kartu Info Akun */}
-      <section className="rounded-2xl border border-stone-200/80 bg-white p-4 space-y-3 shadow-xs">
+      <section className="rounded-2xl border border-white/85 bg-white/92 backdrop-blur-xs p-4 space-y-3 shadow-xs">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <div className="h-12 w-12 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-base flex items-center justify-center shrink-0">
@@ -200,7 +203,7 @@ export function UserPage() {
               setNamaInput(displayName);
               setError(null);
             }}
-            className="shrink-0 rounded-xl border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-semibold text-stone-700 hover:bg-stone-100"
+            className="shrink-0 rounded-xl border border-stone-200 bg-white/95 px-3 py-1.5 text-xs font-semibold text-stone-700 hover:bg-stone-100"
           >
             {editingNama ? "Batal" : "Edit Nama"}
           </button>
@@ -226,7 +229,7 @@ export function UserPage() {
                 maxLength={100}
                 value={namaInput}
                 onChange={(e) => setNamaInput(e.target.value)}
-                className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm text-stone-900 focus:border-emerald-600 focus:outline-none"
+                className="w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 focus:border-emerald-600 focus:outline-none"
               />
             </div>
             <button
@@ -254,7 +257,7 @@ export function UserPage() {
       </section>
 
       {/* Panel Ganti Password */}
-      <section className="rounded-2xl border border-stone-200/80 bg-white p-4 space-y-3 shadow-xs">
+      <section className="rounded-2xl border border-white/85 bg-white/92 backdrop-blur-xs p-4 space-y-3 shadow-xs">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-sm font-bold text-stone-900">Keamanan Akun</h3>
@@ -268,7 +271,7 @@ export function UserPage() {
               setShowPasswordForm((prev) => !prev);
               setError(null);
             }}
-            className="rounded-xl border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-semibold text-stone-700 hover:bg-stone-100"
+            className="rounded-xl border border-stone-200 bg-white/95 px-3 py-1.5 text-xs font-semibold text-stone-700 hover:bg-stone-100"
           >
             {showPasswordForm ? "Tutup" : "Ganti Sandi"}
           </button>
@@ -293,7 +296,7 @@ export function UserPage() {
                 required
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
+                className="w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
               />
             </div>
 
@@ -312,7 +315,7 @@ export function UserPage() {
                 minLength={8}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
+                className="w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
               />
             </div>
 
@@ -331,7 +334,7 @@ export function UserPage() {
                 minLength={8}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
+                className="w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
               />
             </div>
 
@@ -351,7 +354,7 @@ export function UserPage() {
         <button
           type="button"
           onClick={logout}
-          className="w-full rounded-2xl border border-red-200 bg-red-50 py-3 px-4 text-sm font-semibold text-red-700 hover:bg-red-100 transition"
+          className="w-full rounded-2xl border border-red-200 bg-red-50/95 backdrop-blur-xs py-3 px-4 text-sm font-semibold text-red-700 hover:bg-red-100 transition shadow-xs"
         >
           Keluar dari Akun
         </button>
