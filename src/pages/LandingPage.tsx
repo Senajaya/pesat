@@ -6,6 +6,7 @@ interface LandingPageProps {
 }
 
 export function LandingPage({ onGoLogin, onGoRegister }: LandingPageProps) {
+  const [logoPesatOk, setLogoPesatOk] = useState(true);
   const [logoLumajangOk, setLogoLumajangOk] = useState(true);
   const [logoPkkOk, setLogoPkkOk] = useState(true);
 
@@ -50,22 +51,32 @@ export function LandingPage({ onGoLogin, onGoRegister }: LandingPageProps) {
           </span>
         </header>
 
-        {/* Hero Utama PESAT GO! di Bagian Tengah */}
-        <section className="my-auto rounded-3xl border border-white/85 bg-white/85 backdrop-blur-md px-4 py-5 shadow-lg text-center space-y-2.5">
-          <div className="mx-auto flex flex-col items-center">
-            <span className="text-3xl leading-none mb-1" aria-hidden="true">
-              🏡🌿
-            </span>
-            <h1 className="text-[42px] sm:text-5xl font-black italic tracking-tight leading-none select-none">
-              <span className="text-emerald-800">PESAT </span>
-              <span className="text-amber-500">GO!</span>
-            </h1>
-            <div className="mt-2 h-1 w-44 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500" />
-          </div>
-
-          <p className="text-sm sm:text-base font-extrabold italic leading-snug text-stone-900 px-1">
-            Pekarangan Sehat, Produktif, dan Menguntungkan
-          </p>
+        {/* Bagian Tengah: Logo PESAT GO! + Ringkasan & Fitur */}
+        <section className="my-auto rounded-3xl border border-white/85 bg-white/88 backdrop-blur-md px-4 py-4 shadow-lg text-center space-y-2.5">
+          {logoPesatOk ? (
+            <div className="mx-auto flex justify-center">
+              <img
+                src="/logopesat.png"
+                alt="PESAT GO! Pekarangan Sehat, Produktif, dan Menguntungkan"
+                className="max-h-36 w-auto object-contain rounded-2xl"
+                onError={() => setLogoPesatOk(false)}
+              />
+            </div>
+          ) : (
+            <div className="mx-auto flex flex-col items-center">
+              <span className="text-3xl leading-none mb-1" aria-hidden="true">
+                🏡🌿
+              </span>
+              <h1 className="text-[42px] sm:text-5xl font-black italic tracking-tight leading-none select-none">
+                <span className="text-emerald-800">PESAT </span>
+                <span className="text-amber-500">GO!</span>
+              </h1>
+              <div className="mt-2 h-1 w-44 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500" />
+              <p className="mt-1.5 text-sm sm:text-base font-extrabold italic leading-snug text-stone-900">
+                Pekarangan Sehat, Produktif, dan Menguntungkan
+              </p>
+            </div>
+          )}
 
           <p className="text-xs font-semibold leading-relaxed text-stone-700 px-1">
             Catat Tanam, Panen, dan Keuangan Pekarangan Lebih Rapi
