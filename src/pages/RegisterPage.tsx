@@ -51,21 +51,28 @@ export function RegisterPage({
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 p-5 flex flex-col justify-between">
-      <div className="space-y-4">
-        <div className="flex items-center justify-between pt-1">
-          <button
-            type="button"
-            onClick={onBackLanding}
-            className="rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-600 hover:bg-stone-100"
-          >
-            ← Kembali
-          </button>
-          <span className="text-xs font-bold text-emerald-800">PESAT GO!</span>
-        </div>
+    <div
+      className="min-h-screen w-full bg-sky-100 text-stone-900 p-5 flex flex-col justify-between bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url('/register.jpg')` }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between pt-1">
+        <button
+          type="button"
+          onClick={onBackLanding}
+          className="rounded-xl border border-white/80 bg-white/90 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-stone-700 shadow-xs hover:bg-white"
+        >
+          ← Kembali
+        </button>
+        <span className="rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-extrabold text-emerald-800 shadow-xs">
+          PESAT GO!
+        </span>
+      </div>
 
-        <div className="space-y-1">
-          <h1 className="text-xl font-bold text-stone-900">Buat Akun Baru</h1>
+      {/* Card Form Daftar */}
+      <div className="my-auto rounded-3xl border border-white/80 bg-white/92 backdrop-blur-md p-5 shadow-xl space-y-3.5">
+        <div className="text-center space-y-1">
+          <h1 className="text-xl font-extrabold text-emerald-950">Buat Akun Baru</h1>
           <p className="text-xs text-stone-600">
             Mulai kelola tanaman dan keuangan pekarangan Anda di PESAT GO!.
           </p>
@@ -74,7 +81,7 @@ export function RegisterPage({
         {error && (
           <div
             role="alert"
-            className="rounded-2xl border border-red-200 bg-red-50 p-3.5 text-xs text-red-700"
+            className="rounded-2xl border border-red-200 bg-red-50 p-3 text-xs text-red-700"
           >
             {error}
           </div>
@@ -96,7 +103,7 @@ export function RegisterPage({
               value={nama}
               onChange={(e) => setNama(e.target.value)}
               placeholder="Nama lengkap Anda"
-              className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
+              className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
             />
           </div>
 
@@ -115,7 +122,7 @@ export function RegisterPage({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="nama@email.com"
-              className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
+              className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
             />
           </div>
 
@@ -135,7 +142,7 @@ export function RegisterPage({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Minimal 8 karakter"
-              className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
+              className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
             />
           </div>
 
@@ -155,30 +162,32 @@ export function RegisterPage({
               value={konfirmasiPassword}
               onChange={(e) => setKonfirmasiPassword(e.target.value)}
               placeholder="Ulangi kata sandi"
-              className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
+              className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-600/20"
             />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full rounded-2xl bg-emerald-600 py-3.5 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60 transition mt-2"
+            className="w-full rounded-2xl bg-emerald-600 py-3.5 px-4 text-sm font-bold text-white shadow hover:bg-emerald-700 disabled:opacity-60 transition mt-1"
           >
             {submitting ? "Mendaftarkan..." : "Daftar Sekarang"}
           </button>
         </form>
+
+        <p className="pt-1 text-center text-xs text-stone-600">
+          Sudah punya akun?{" "}
+          <button
+            type="button"
+            onClick={onGoLogin}
+            className="font-bold text-emerald-700 hover:underline"
+          >
+            Masuk di sini
+          </button>
+        </p>
       </div>
 
-      <p className="pt-6 text-center text-xs text-stone-600">
-        Sudah punya akun?{" "}
-        <button
-          type="button"
-          onClick={onGoLogin}
-          className="font-semibold text-emerald-700 hover:underline"
-        >
-          Masuk di sini
-        </button>
-      </p>
+      <div className="h-4" />
     </div>
   );
 }

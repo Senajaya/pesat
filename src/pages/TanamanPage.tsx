@@ -59,6 +59,10 @@ const formatRupiah = (val: string | number) =>
   }).format(Number(val) || 0);
 
 const todayInputValue = () => new Date().toISOString().slice(0, 10);
+const toDateInputValue = (iso: string) => {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? todayInputValue() : d.toISOString().slice(0, 10);
+};
 
 export function TanamanPage() {
   const [items, setItems] = useState<TanamanItem[]>([]);
@@ -77,7 +81,17 @@ export function TanamanPage() {
   const [lokasiTanam, setLokasiTanam] = useState("");
   const [submittingCreate, setSubmittingCreate] = useState(false);
 
-  // State modal/form catat panen
+  // State modal edit tanaman
+  const [editTarget, setEditTarget] = useState<TanamanItem | null>(null);
+  const [editNama, setEditNama] = useState("");
+  const [editVarietas, setEditVarietas] = useState("");
+  const [editTanggalTanam, setEditTanggalTanam] = useState(todayInputValue);
+  const [editJumlahBibit, setEditJumlahBibit] = useState("");
+  const [editModalAwal, setEditModalAwal] = useState("0");
+  const [editLokasiTanam, setEditLokasiTanam] = useState("");
+  const [submittingEdit, setSubmittingEdit] = useState(false);
+
+  // State modal catat panen
   const [panenTarget, setPanenTarget] = useState<TanamanItem | null>(null);
   const [tanggalPanen, setTanggalPanen] = useState(todayInputValue);
   const [jumlahHasil, setJumlahHasil] = useState("");
@@ -148,6 +162,53 @@ export function TanamanPage() {
     }
   };
 
+  const openEditModal = (tanaman: TanamanItem) => {
+    setEditTarget(tanaman);
+    setEditNama(tanaman.namaTanaman);
+    setEditVarietas(tanaman.varietas || "");
+    setEditTanggalTanam(toDateInputValue(tanaman.tanggalTanam));
+    setEditJumlahBibit(tanaman.jumlahBibit);
+    setEditModalAwal(String(Number(tanaman.modalAwal) || 0));
+    setEditLokasiTanam(tanaman.lokasiTanam || "");
+    setError(null);
+  };
+
+  const handleUpdateTanaman = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editTarget) return;
+    if (!editNama.trim() || !editJumlahBibit.trim()) {
+      setError("Nama tanaman dan jumlah bibit wajib diisi.");
+      return;
+    }
+
+    setSubmittingEdit(true);
+    setError(null);
+    setFeedback(null);
+    try {
+      await apiFetch(`/api/tanaman/${editTarget.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          namaTanaman: editNama.trim(),
+          varietas: editVarietas.trim() || null,
+          tanggalTanam: editTanggalTanam,
+          jumlahBibit: editJumlahBibit.trim(),
+          modalAwal: Number(editModalAwal) || 0,
+          lokasiTanam: editLokasiTanam.trim() || null,
+        }),
+      });
+
+      setEditTarget(null);
+      setFeedback(`Data tanaman "${editNama.trim()}" berhasil diperbarui.`);
+      await loadTanaman(filterTab);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Gagal memperbarui data tanaman."
+      );
+    } finally {
+      setSubmittingEdit(false);
+    }
+  };
+
   const handleStatusChange = async (id: string, nextStatus: StatusTanaman) => {
     setError(null);
     setFeedback(null);
@@ -211,6 +272,7 @@ export function TanamanPage() {
   };
 
   const handleDeleteTanaman = async (tanaman: TanamanItem) => {
+    if (!window.confirm(`Hapus tanaman "${tanaman.namaTanaman}"?`)) return;
     setError(null);
     setFeedback(null);
     try {
@@ -245,6 +307,12 @@ export function TanamanPage() {
           {showCreateForm ? "Tutup Form" : "+ Tambah Tanam"}
         </button>
       </header>
+
+      {/* Ringkasan Jumlah Tercatat */}
+      <div className="rounded-2xl border border-stone-200/80 bg-white px-4 py-2.5 flex items-center justify-between text-xs">
+        <span className="text-stone-600">Total baris tanaman tampil:</span>
+        <span className="font-bold text-emerald-800">{items.length} catatan</span>
+      </div>
 
       {/* Notifikasi */}
       {feedback && (
@@ -288,7 +356,7 @@ export function TanamanPage() {
           <div className="grid grid-cols-2 gap-2.5">
             <div>
               <label className="block text-xs font-semibold text-stone-700 mb-1">
-                Tanggal Tanam *
+                Kapan Menanam (Tanggal) *
               </label>
               <input
                 type="date"
@@ -300,14 +368,14 @@ export function TanamanPage() {
             </div>
             <div>
               <label className="block text-xs font-semibold text-stone-700 mb-1">
-                Jumlah Bibit *
+                Jumlah Tanaman / Bibit *
               </label>
               <input
                 type="text"
                 required
                 value={jumlahBibit}
                 onChange={(e) => setJumlahBibit(e.target.value)}
-                placeholder="Contoh: 25 polybag"
+                placeholder="Contoh: 25 polybag / 40 batang"
                 className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
               />
             </div>
@@ -429,9 +497,9 @@ export function TanamanPage() {
                         </span>
                       ) : null}
                     </h2>
-                    <p className="text-xs text-stone-500 mt-0.5">
-                      Tanam: {formatTanggal(item.tanggalTanam)} ·{" "}
-                      {item.jumlahBibit}
+                    <p className="text-xs text-stone-600 mt-0.5">
+                      Ditanam: <span className="font-semibold">{formatTanggal(item.tanggalTanam)}</span> ·{" "}
+                      Jumlah: <span className="font-semibold">{item.jumlahBibit}</span>
                     </p>
                   </div>
                   <span
@@ -460,7 +528,7 @@ export function TanamanPage() {
                   </div>
                 )}
 
-                <div className="flex items-center justify-between gap-2 pt-1 border-t border-stone-100">
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-stone-100">
                   <select
                     aria-label={`Ubah status ${item.namaTanaman}`}
                     value={item.status}
@@ -484,6 +552,13 @@ export function TanamanPage() {
                     </button>
                     <button
                       type="button"
+                      onClick={() => openEditModal(item)}
+                      className="rounded-xl border border-stone-200 bg-white px-2.5 py-1.5 text-xs font-medium text-stone-700 hover:bg-stone-100"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => handleDeleteTanaman(item)}
                       className="rounded-xl border border-red-200 bg-red-50 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-100"
                     >
@@ -497,7 +572,121 @@ export function TanamanPage() {
         </div>
       )}
 
-      {/* Modal / Panel Catat Panen */}
+      {/* Modal Edit Tanaman */}
+      {editTarget && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 p-4"
+        >
+          <form
+            onSubmit={handleUpdateTanaman}
+            className="w-full max-w-md rounded-3xl bg-white p-5 space-y-3 shadow-lg max-h-[90vh] overflow-y-auto"
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="text-base font-bold text-stone-900">
+                Edit Tanaman
+              </h2>
+              <button
+                type="button"
+                onClick={() => setEditTarget(null)}
+                className="rounded-lg px-2 py-1 text-xs font-semibold text-stone-500 hover:bg-stone-100"
+              >
+                Tutup
+              </button>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-stone-700 mb-1">
+                Nama Tanaman *
+              </label>
+              <input
+                type="text"
+                required
+                value={editNama}
+                onChange={(e) => setEditNama(e.target.value)}
+                className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-2.5">
+              <div>
+                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                  Tanggal Tanam *
+                </label>
+                <input
+                  type="date"
+                  required
+                  value={editTanggalTanam}
+                  onChange={(e) => setEditTanggalTanam(e.target.value)}
+                  className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                  Jumlah Tanaman / Bibit *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editJumlahBibit}
+                  onChange={(e) => setEditJumlahBibit(e.target.value)}
+                  className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2.5">
+              <div>
+                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                  Varietas
+                </label>
+                <input
+                  type="text"
+                  value={editVarietas}
+                  onChange={(e) => setEditVarietas(e.target.value)}
+                  className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                  Lokasi Tanam
+                </label>
+                <input
+                  type="text"
+                  value={editLokasiTanam}
+                  onChange={(e) => setEditLokasiTanam(e.target.value)}
+                  className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-stone-700 mb-1">
+                Modal Awal (Rp)
+              </label>
+              <input
+                type="number"
+                min={0}
+                step="any"
+                value={editModalAwal}
+                onChange={(e) => setEditModalAwal(e.target.value)}
+                className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={submittingEdit}
+              className="w-full rounded-2xl bg-emerald-600 py-3 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+            >
+              {submittingEdit ? "Menyimpan..." : "Simpan Perubahan"}
+            </button>
+          </form>
+        </div>
+      )}
+
+      {/* Modal Catat Panen */}
       {panenTarget && (
         <div
           role="dialog"

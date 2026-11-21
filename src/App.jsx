@@ -7,6 +7,7 @@ import { RegisterPage } from "./pages/RegisterPage";
 import { BerandaPage } from "./pages/BerandaPage";
 import { TanamanPage } from "./pages/TanamanPage";
 import { KeuanganPage } from "./pages/KeuanganPage";
+import { UserPage } from "./pages/UserPage";
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -16,6 +17,8 @@ function AppContent() {
   useEffect(() => {
     if (user) {
       setActiveTab("beranda");
+    } else {
+      setPublicView("landing");
     }
   }, [user]);
 
@@ -63,6 +66,7 @@ function AppContent() {
       {activeTab === "beranda" && <BerandaPage onNavigate={setActiveTab} />}
       {activeTab === "tanaman" && <TanamanPage />}
       {activeTab === "keuangan" && <KeuanganPage />}
+      {activeTab === "user" && <UserPage />}
     </MobileShell>
   );
 }

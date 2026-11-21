@@ -6,21 +6,30 @@ interface LandingPageProps {
 }
 
 export function LandingPage({ onGoLogin, onGoRegister }: LandingPageProps) {
-  const [heroImgOk, setHeroImgOk] = useState(true);
   const [logoLumajangOk, setLogoLumajangOk] = useState(true);
   const [logoPkkOk, setLogoPkkOk] = useState(true);
 
+  const fiturList = [
+    { judul: "Kelola Tanaman", icon: "🌱" },
+    { judul: "Catat Keuangan", icon: "📊" },
+    { judul: "Pantau Panen", icon: "🧺" },
+    { judul: "Pekarangan Produktif", icon: "🏡" },
+  ];
+
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 flex flex-col justify-between p-5">
-      <div className="space-y-5">
-        {/* Header & Logo */}
-        <header className="flex items-center justify-between pt-1">
+    <div
+      className="min-h-screen w-full bg-emerald-950/10 text-stone-900 p-5 flex flex-col justify-between bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url('/landing.jpg')` }}
+    >
+      {/* Kartu Atas: Header, Judul, dan Ringkasan Fitur */}
+      <div className="rounded-3xl border border-white/80 bg-white/90 backdrop-blur-md p-5 shadow-xl space-y-4">
+        <header className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {logoLumajangOk && (
               <img
                 src="/logo_lumajang.png"
                 alt="Logo Kabupaten Lumajang"
-                className="h-8 w-auto object-contain"
+                className="h-7 w-auto object-contain"
                 onError={() => setLogoLumajangOk(false)}
               />
             )}
@@ -28,81 +37,59 @@ export function LandingPage({ onGoLogin, onGoRegister }: LandingPageProps) {
               <img
                 src="/logo_pkk.png"
                 alt="Logo PKK"
-                className="h-8 w-auto object-contain"
+                className="h-7 w-auto object-contain"
                 onError={() => setLogoPkkOk(false)}
               />
             )}
-            <span className="text-sm font-bold tracking-tight text-emerald-800">
+            <span className="text-xs font-extrabold tracking-wide text-emerald-800">
               PESAT GO!
             </span>
           </div>
-          <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-semibold text-emerald-800">
+          <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-[10px] font-semibold text-emerald-800">
             gerbanglumajang.my.id
           </span>
         </header>
 
-        {/* Banner / Hero */}
-        <section className="overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-xs">
-          {heroImgOk ? (
-            <img
-              src="/landing.jpg"
-              alt="Pekarangan produktif PESAT GO!"
-              className="h-44 w-full object-cover"
-              onError={() => setHeroImgOk(false)}
-            />
-          ) : (
-            <div className="h-36 w-full bg-gradient-to-br from-emerald-700 to-emerald-500 p-5 flex items-end">
-              <p className="text-xs font-medium text-emerald-50">
-                Pekarangan Lestari · Pencatatan Digital
-              </p>
+        <div className="space-y-1.5">
+          <h1 className="text-xl font-extrabold leading-snug text-emerald-950">
+            Catat Tanam, Panen, dan Keuangan Pekarangan Lebih Rapi
+          </h1>
+          <p className="text-xs leading-relaxed text-stone-600">
+            Pantau status tanaman, jadwal panen, modal bibit, hingga hasil
+            penjualan pekarangan langsung dari ponsel Anda dengan aman.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          {fiturList.map((item) => (
+            <div
+              key={item.judul}
+              className="flex items-center gap-2 rounded-2xl border border-emerald-100 bg-emerald-50/90 px-3 py-2"
+            >
+              <span className="text-base" aria-hidden="true">
+                {item.icon}
+              </span>
+              <span className="text-[11px] font-semibold text-emerald-950 leading-tight">
+                {item.judul}
+              </span>
             </div>
-          )}
-
-          <div className="p-5 space-y-2.5">
-            <h1 className="text-xl font-bold leading-snug text-stone-900">
-              Catat Tanam, Panen, dan Keuangan Pekarangan Lebih Rapi
-            </h1>
-            <p className="text-xs leading-relaxed text-stone-600">
-              Pantau status tanaman, jadwal panen, modal bibit, hingga hasil
-              penjualan pekarangan langsung dari ponsel Anda dengan aman.
-            </p>
-          </div>
-        </section>
-
-        {/* Keunggulan Singkat */}
-        <section className="grid grid-cols-1 gap-2.5">
-          <div className="rounded-2xl border border-stone-200/80 bg-white p-3.5">
-            <p className="text-xs font-semibold text-emerald-800">
-              1. Status Tanaman Terpantau
-            </p>
-            <p className="text-xs text-stone-600 mt-0.5">
-              Kelompokkan tanaman berstatus Ditanam, Belum Panen, dan Sudah Panen.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-stone-200/80 bg-white p-3.5">
-            <p className="text-xs font-semibold text-emerald-800">
-              2. Dompet Pekarangan Otomatis
-            </p>
-            <p className="text-xs text-stone-600 mt-0.5">
-              Hitung pemasukan, pengeluaran, dan saldo bersih secara transparan.
-            </p>
-          </div>
-        </section>
+          ))}
+        </div>
       </div>
 
-      {/* Tombol Aksi */}
-      <div className="pt-6 space-y-2.5">
+      {/* Kartu Bawah: Tombol Aksi */}
+      <div className="rounded-3xl border border-white/80 bg-white/92 backdrop-blur-md p-4 shadow-xl space-y-2.5">
         <button
           type="button"
           onClick={onGoLogin}
-          className="w-full rounded-2xl bg-emerald-600 py-3.5 px-4 text-sm font-semibold text-white shadow-xs hover:bg-emerald-700 active:scale-[0.99] transition"
+          className="w-full rounded-2xl bg-emerald-600 py-3.5 px-4 text-sm font-bold text-white shadow hover:bg-emerald-700 active:scale-[0.99] transition"
         >
           Masuk ke Akun
         </button>
         <button
           type="button"
           onClick={onGoRegister}
-          className="w-full rounded-2xl border border-emerald-600 bg-white py-3.5 px-4 text-sm font-semibold text-emerald-700 hover:bg-emerald-50 active:scale-[0.99] transition"
+          className="w-full rounded-2xl border border-emerald-600 bg-white/95 py-3 px-4 text-xs font-bold text-emerald-800 hover:bg-emerald-50 active:scale-[0.99] transition"
         >
           Daftar Akun Baru
         </button>

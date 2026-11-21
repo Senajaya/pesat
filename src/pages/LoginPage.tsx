@@ -18,7 +18,6 @@ export function LoginPage({
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [bannerOk, setBannerOk] = useState(true);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,32 +42,28 @@ export function LoginPage({
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 p-5 flex flex-col justify-between">
-      <div className="space-y-4">
-        <div className="flex items-center justify-between pt-1">
-          <button
-            type="button"
-            onClick={onBackLanding}
-            className="rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-600 hover:bg-stone-100"
-          >
-            ← Kembali
-          </button>
-          <span className="text-xs font-bold text-emerald-800">PESAT GO!</span>
-        </div>
+    <div
+      className="min-h-screen w-full bg-sky-100 text-stone-900 p-5 flex flex-col justify-between bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url('/login.jpg')` }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between pt-1">
+        <button
+          type="button"
+          onClick={onBackLanding}
+          className="rounded-xl border border-white/80 bg-white/90 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-stone-700 shadow-xs hover:bg-white"
+        >
+          ← Kembali
+        </button>
+        <span className="rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-extrabold text-emerald-800 shadow-xs">
+          PESAT GO!
+        </span>
+      </div>
 
-        {bannerOk && (
-          <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white">
-            <img
-              src="/login.jpg"
-              alt="Masuk PESAT GO!"
-              className="h-32 w-full object-cover"
-              onError={() => setBannerOk(false)}
-            />
-          </div>
-        )}
-
-        <div className="space-y-1">
-          <h1 className="text-xl font-bold text-stone-900">Masuk</h1>
+      {/* Card Form Masuk */}
+      <div className="my-auto rounded-3xl border border-white/80 bg-white/92 backdrop-blur-md p-5 shadow-xl space-y-4">
+        <div className="text-center space-y-1">
+          <h1 className="text-xl font-extrabold text-emerald-950">Selamat Datang!</h1>
           <p className="text-xs text-stone-600">
             Akses data tanaman, panen, dan keuangan pekarangan Anda.
           </p>
@@ -77,7 +72,7 @@ export function LoginPage({
         {error && (
           <div
             role="alert"
-            className="rounded-2xl border border-red-200 bg-red-50 p-3.5 text-xs text-red-700"
+            className="rounded-2xl border border-red-200 bg-red-50 p-3 text-xs text-red-700"
           >
             {error}
           </div>
@@ -124,7 +119,7 @@ export function LoginPage({
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-medium text-stone-600 hover:bg-stone-100"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50"
               >
                 {showPassword ? "Sembunyi" : "Lihat"}
               </button>
@@ -134,23 +129,25 @@ export function LoginPage({
           <button
             type="submit"
             disabled={submitting}
-            className="w-full rounded-2xl bg-emerald-600 py-3.5 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60 transition mt-2"
+            className="w-full rounded-2xl bg-emerald-600 py-3.5 px-4 text-sm font-bold text-white shadow hover:bg-emerald-700 disabled:opacity-60 transition mt-1"
           >
             {submitting ? "Memproses..." : "Masuk"}
           </button>
         </form>
+
+        <p className="pt-1 text-center text-xs text-stone-600">
+          Belum punya akun?{" "}
+          <button
+            type="button"
+            onClick={onGoRegister}
+            className="font-bold text-emerald-700 hover:underline"
+          >
+            Daftar di sini
+          </button>
+        </p>
       </div>
 
-      <p className="pt-6 text-center text-xs text-stone-600">
-        Belum punya akun?{" "}
-        <button
-          type="button"
-          onClick={onGoRegister}
-          className="font-semibold text-emerald-700 hover:underline"
-        >
-          Daftar di sini
-        </button>
-      </p>
+      <div className="h-4" />
     </div>
   );
 }
