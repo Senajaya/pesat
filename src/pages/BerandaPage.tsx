@@ -38,8 +38,11 @@ export function BerandaPage({
   }, []);
 
   return (
-    <div className="p-4 space-y-4">
-      <header className="flex items-center justify-between pt-2">
+    <div
+      className="min-h-dvh p-4 space-y-4 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url('/beranda.jpg')` }}
+    >
+      <header className="flex items-center justify-between pt-2 rounded-2xl border border-white/80 bg-white/88 backdrop-blur-md px-3.5 py-2.5 shadow-xs">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
             PESAT GO!
@@ -51,32 +54,32 @@ export function BerandaPage({
         <button
           type="button"
           onClick={logout}
-          className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-600 hover:bg-stone-100"
+          className="rounded-lg border border-stone-200 bg-white/95 px-3 py-1.5 text-xs font-medium text-stone-600 hover:bg-stone-100"
         >
           Keluar
         </button>
       </header>
 
       {error && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+        <div className="rounded-xl border border-red-200 bg-red-50/95 p-3 text-xs text-red-700">
           {error}
         </div>
       )}
 
       <section className="grid grid-cols-3 gap-2.5">
-        <div className="rounded-2xl bg-white p-3 border border-stone-200/80 text-center">
+        <div className="rounded-2xl bg-white/92 backdrop-blur-xs p-3 border border-white/85 text-center shadow-xs">
           <p className="text-xl font-bold text-emerald-700">
             {summary?.tanaman.DITANAM ?? 0}
           </p>
           <p className="text-[11px] text-stone-500 mt-0.5">Ditanam</p>
         </div>
-        <div className="rounded-2xl bg-white p-3 border border-stone-200/80 text-center">
+        <div className="rounded-2xl bg-white/92 backdrop-blur-xs p-3 border border-white/85 text-center shadow-xs">
           <p className="text-xl font-bold text-amber-600">
             {summary?.tanaman.BELUM_PANEN ?? 0}
           </p>
           <p className="text-[11px] text-stone-500 mt-0.5">Belum Panen</p>
         </div>
-        <div className="rounded-2xl bg-white p-3 border border-stone-200/80 text-center">
+        <div className="rounded-2xl bg-white/92 backdrop-blur-xs p-3 border border-white/85 text-center shadow-xs">
           <p className="text-xl font-bold text-sky-700">
             {summary?.tanaman.SUDAH_PANEN ?? 0}
           </p>
@@ -84,7 +87,7 @@ export function BerandaPage({
         </div>
       </section>
 
-      <section className="rounded-2xl bg-emerald-700 p-4 text-white shadow-sm">
+      <section className="rounded-2xl bg-emerald-700/95 backdrop-blur-xs p-4 text-white shadow-sm border border-emerald-500/50">
         <p className="text-xs text-emerald-100">Dompet Pekarangan · Saldo Bersih</p>
         <p className="text-2xl font-bold mt-1">
           {formatRupiah(summary?.keuangan.saldoBersih ?? 0)}
@@ -96,7 +99,7 @@ export function BerandaPage({
         </div>
       </section>
 
-      <section className="space-y-2">
+      <section className="space-y-2 rounded-2xl border border-white/80 bg-white/85 backdrop-blur-md p-3.5 shadow-xs">
         <h2 className="text-sm font-semibold text-stone-800">Aksi Cepat</h2>
         <div className="grid grid-cols-2 gap-2.5">
           <button
@@ -109,7 +112,7 @@ export function BerandaPage({
           <button
             type="button"
             onClick={() => onNavigate("keuangan")}
-            className="rounded-xl border border-emerald-600 bg-white py-3 px-4 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
+            className="rounded-xl border border-emerald-600 bg-white/95 py-3 px-4 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
           >
             + Catat Keuangan
           </button>
