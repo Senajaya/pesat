@@ -51,7 +51,7 @@ export function LandingPage({ onGoLogin, onGoRegister }: LandingPageProps) {
           </span>
         </header>
 
-        {/* Bagian Tengah: Logo PESAT GO! + Ringkasan & Fitur */}
+        {/* Bagian Tengah: Hero PESAT GO! + Ringkasan & Fitur */}
         <section className="my-auto rounded-3xl border border-white/85 bg-white/88 backdrop-blur-md px-4 py-4 shadow-lg text-center space-y-2.5">
           {logoPesatOk ? (
             <div className="mx-auto flex justify-center">
@@ -63,7 +63,7 @@ export function LandingPage({ onGoLogin, onGoRegister }: LandingPageProps) {
               />
             </div>
           ) : (
-            <div className="mx-auto flex flex-col items-center">
+            <div className="mx-auto flex flex-col items-center py-1">
               <span className="text-3xl leading-none mb-1" aria-hidden="true">
                 🏡🌿
               </span>
