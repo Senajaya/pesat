@@ -287,9 +287,12 @@ export function TanamanPage() {
   };
 
   return (
-    <div className="p-4 space-y-4">
+    <div
+      className="min-h-dvh p-4 space-y-4 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url('/beranda.jpg')` }}
+    >
       {/* Header */}
-      <header className="flex items-center justify-between pt-2">
+      <header className="flex items-center justify-between pt-2 rounded-2xl border border-white/80 bg-white/88 backdrop-blur-md px-3.5 py-2.5 shadow-xs">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
             PESAT GO!
@@ -309,21 +312,21 @@ export function TanamanPage() {
       </header>
 
       {/* Ringkasan Jumlah Tercatat */}
-      <div className="rounded-2xl border border-stone-200/80 bg-white px-4 py-2.5 flex items-center justify-between text-xs">
+      <div className="rounded-2xl border border-white/80 bg-white/90 backdrop-blur-xs px-4 py-2.5 flex items-center justify-between text-xs shadow-xs">
         <span className="text-stone-600">Total baris tanaman tampil:</span>
         <span className="font-bold text-emerald-800">{items.length} catatan</span>
       </div>
 
       {/* Notifikasi */}
       {feedback && (
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-xs font-medium text-emerald-800">
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50/95 p-3 text-xs font-medium text-emerald-800">
           {feedback}
         </div>
       )}
       {error && (
         <div
           role="alert"
-          className="rounded-2xl border border-red-200 bg-red-50 p-3 text-xs text-red-700"
+          className="rounded-2xl border border-red-200 bg-red-50/95 p-3 text-xs text-red-700"
         >
           {error}
         </div>
@@ -333,7 +336,7 @@ export function TanamanPage() {
       {showCreateForm && (
         <form
           onSubmit={handleCreateTanaman}
-          className="rounded-2xl border border-stone-200 bg-white p-4 space-y-3 shadow-xs"
+          className="rounded-2xl border border-white/85 bg-white/95 backdrop-blur-md p-4 space-y-3 shadow-xs"
         >
           <h2 className="text-sm font-bold text-stone-900">
             Catat Tanaman Baru
@@ -453,7 +456,7 @@ export function TanamanPage() {
             className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition ${
               filterTab === tab.key
                 ? "bg-emerald-700 text-white"
-                : "bg-white text-stone-600 border border-stone-200 hover:bg-stone-100"
+                : "bg-white/90 text-stone-600 border border-white/80 hover:bg-white"
             }`}
           >
             {tab.label}
@@ -463,11 +466,11 @@ export function TanamanPage() {
 
       {/* Daftar Tanaman */}
       {loading ? (
-        <div className="rounded-2xl bg-white p-6 text-center text-xs text-stone-500 border border-stone-200/80">
+        <div className="rounded-2xl bg-white/92 backdrop-blur-xs p-6 text-center text-xs text-stone-500 border border-white/80">
           Memuat data tanaman...
         </div>
       ) : items.length === 0 ? (
-        <div className="rounded-2xl bg-white p-6 text-center border border-stone-200/80 space-y-2">
+        <div className="rounded-2xl bg-white/92 backdrop-blur-xs p-6 text-center border border-white/80 space-y-2">
           <p className="text-sm font-semibold text-stone-800">
             Belum ada data tanaman
           </p>
@@ -484,7 +487,7 @@ export function TanamanPage() {
             return (
               <article
                 key={item.id}
-                className="rounded-2xl border border-stone-200/80 bg-white p-4 space-y-3"
+                className="rounded-2xl border border-white/85 bg-white/92 backdrop-blur-xs p-4 space-y-3 shadow-xs"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
@@ -515,7 +518,7 @@ export function TanamanPage() {
                 </div>
 
                 {panenTerakhir && (
-                  <div className="rounded-xl bg-stone-50 border border-stone-200/70 p-2.5 text-xs text-stone-700">
+                  <div className="rounded-xl bg-stone-50/90 border border-stone-200/70 p-2.5 text-xs text-stone-700">
                     <p className="font-semibold text-emerald-800">
                       Panen terakhir: {formatTanggal(panenTerakhir.tanggalPanen)}{" "}
                       ({panenTerakhir.jumlahHasil})
