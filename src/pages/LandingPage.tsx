@@ -21,8 +21,8 @@ export function LandingPage({ onGoLogin, onGoRegister }: LandingPageProps) {
         className="min-h-dvh w-full max-w-md text-stone-900 px-3.5 py-3 flex flex-col justify-between gap-2.5 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url('/landing.jpg')` }}
       >
-        {/* Bagian Tengah Naik Lebih Ke Atas & Lebih Proporsional */}
-        <section className="mt-2 mb-auto rounded-3xl border border-white/85 bg-white/90 backdrop-blur-md px-3.5 py-3.5 shadow-lg text-center space-y-2">
+        {/* Bagian Tengah Proporsional & Pas di Tengah */}
+        <section className="my-auto rounded-3xl border border-white/85 bg-white/90 backdrop-blur-md px-3.5 py-3.5 shadow-lg text-center space-y-2">
           <div className="mx-auto flex flex-col items-center">
             {logoPesatOk && (
               <img
@@ -62,7 +62,7 @@ export function LandingPage({ onGoLogin, onGoRegister }: LandingPageProps) {
           </div>
         </section>
 
-        {/* Tombol Aksi Bawah (Lebih Ringkas Agar Pas 1 Layar) */}
+        {/* Tombol Aksi Bawah */}
         <div className="rounded-3xl border border-white/85 bg-white/92 backdrop-blur-md p-3 shadow-lg space-y-1.5">
           <button
             type="button"
