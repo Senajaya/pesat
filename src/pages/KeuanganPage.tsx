@@ -24,10 +24,11 @@ type FilterJenis = "SEMUA" | JenisTransaksi;
 
 const KATEGORI_PEMASUKAN = ["Penjualan Panen", "Pemasukan Lain"];
 const KATEGORI_PENGELUARAN = [
-  "Biaya PESAT",
-  "Bibit & Benih",
   "Pupuk & Perawatan",
+  "Tenaga Kerja",
   "Peralatan",
+  "Biaya PESAT",
+  "Pengeluaran Lainnya",
 ];
 
 const formatRupiah = (val: string | number) =>
@@ -62,8 +63,9 @@ export function KeuanganPage() {
   const [error, setError] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
 
-  // Form tambah transaksi
+  // Form tambah transaksi (umum maupun khusus pengeluaran non-bibit)
   const [showForm, setShowForm] = useState(false);
+  const [modePengeluaranKhusus, setModePengeluaranKhusus] = useState(false);
   const [jenis, setJenis] = useState<JenisTransaksi>("PEMASUKAN");
   const [kategori, setKategori] = useState("Penjualan Panen");
   const [nominal, setNominal] = useState("");
@@ -106,10 +108,34 @@ export function KeuanganPage() {
     loadData(filterJenis);
   }, [filterJenis, loadData]);
 
+  const openFormUmum = () => {
+    setError(null);
+    if (showForm && !modePengeluaranKhusus) {
+      setShowForm(false);
+      return;
+    }
+    setModePengeluaranKhusus(false);
+    setJenis("PEMASUKAN");
+    setKategori("Penjualan Panen");
+    setShowForm(true);
+  };
+
+  const openFormTambahPengeluaran = () => {
+    setError(null);
+    if (showForm && modePengeluaranKhusus) {
+      setShowForm(false);
+      return;
+    }
+    setModePengeluaranKhusus(true);
+    setJenis("PENGELUARAN");
+    setKategori("Pupuk & Perawatan");
+    setShowForm(true);
+  };
+
   const handleSwitchJenis = (nextJenis: JenisTransaksi) => {
     setJenis(nextJenis);
     setKategori(
-      nextJenis === "PEMASUKAN" ? "Penjualan Panen" : "Biaya PESAT"
+      nextJenis === "PEMASUKAN" ? "Penjualan Panen" : "Pupuk & Perawatan"
     );
   };
 
@@ -141,7 +167,12 @@ export function KeuanganPage() {
       setTanggal(todayInputValue());
       setKeterangan("");
       setShowForm(false);
-      setFeedback("Transaksi berhasil dicatat.");
+      setModePengeluaranKhusus(false);
+      setFeedback(
+        jenis === "PENGELUARAN"
+          ? "Pengeluaran berhasil dicatat."
+          : "Transaksi berhasil dicatat."
+      );
       await loadData(filterJenis);
     } catch (err) {
       setError(
@@ -222,7 +253,7 @@ export function KeuanganPage() {
       style={{ backgroundImage: `url('/keuangan.jpg')` }}
     >
       {/* Header */}
-      <header className="flex items-center justify-between pt-2 rounded-2xl border border-white/80 bg-white/88 backdrop-blur-md px-3.5 py-2.5 shadow-xs">
+      <header className="flex flex-wrap items-center justify-between gap-2 pt-2 rounded-2xl border border-white/80 bg-white/88 backdrop-blur-md px-3.5 py-2.5 shadow-xs">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
             PESAT GO!
@@ -231,16 +262,22 @@ export function KeuanganPage() {
             Keuangan Pekarangan
           </h1>
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            setShowForm((prev) => !prev);
-            setError(null);
-          }}
-          className="rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
-        >
-          {showForm ? "Tutup Form" : "+ Catat Kas"}
-        </button>
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={openFormTambahPengeluaran}
+            className="rounded-xl border border-rose-600 bg-rose-600 px-3 py-2 text-xs font-semibold text-white hover:bg-rose-700"
+          >
+            {showForm && modePengeluaranKhusus ? "Tutup" : "+ Tambah Pengeluaran"}
+          </button>
+          <button
+            type="button"
+            onClick={openFormUmum}
+            className="rounded-xl bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
+          >
+            {showForm && !modePengeluaranKhusus ? "Tutup" : "+ Catat Kas"}
+          </button>
+        </div>
       </header>
 
       {/* Kartu Ringkasan Saldo */}
@@ -281,40 +318,52 @@ export function KeuanganPage() {
         </div>
       )}
 
-      {/* Form Tambah Transaksi */}
+      {/* Form Tambah Transaksi / Tambah Pengeluaran */}
       {showForm && (
         <form
           onSubmit={handleSubmit}
           className="rounded-2xl border border-white/85 bg-white/95 backdrop-blur-md p-4 space-y-3 shadow-xs"
         >
-          <h2 className="text-sm font-bold text-stone-900">
-            Tambah Transaksi
-          </h2>
-
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => handleSwitchJenis("PEMASUKAN")}
-              className={`rounded-xl py-2 text-xs font-semibold border transition ${
-                jenis === "PEMASUKAN"
-                  ? "border-emerald-600 bg-emerald-50 text-emerald-800"
-                  : "border-stone-200 bg-white text-stone-600"
-              }`}
-            >
-              Penerimaan Panen (+)
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSwitchJenis("PENGELUARAN")}
-              className={`rounded-xl py-2 text-xs font-semibold border transition ${
-                jenis === "PENGELUARAN"
-                  ? "border-rose-600 bg-rose-50 text-rose-800"
-                  : "border-stone-200 bg-white text-stone-600"
-              }`}
-            >
-              Biaya PESAT / Keluar (-)
-            </button>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-bold text-stone-900">
+              {modePengeluaranKhusus
+                ? "Tambah Pengeluaran (Selain Biaya Bibit/Tanam)"
+                : "Tambah Transaksi"}
+            </h2>
           </div>
+
+          {modePengeluaranKhusus && (
+            <p className="text-[11px] text-stone-600 bg-rose-50/80 border border-rose-100 rounded-xl px-3 py-2">
+              Catat biaya operasional seperti pupuk, tenaga kerja, perawatan, atau kebutuhan lain di luar modal awal bibit.
+            </p>
+          )}
+
+          {!modePengeluaranKhusus && (
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => handleSwitchJenis("PEMASUKAN")}
+                className={`rounded-xl py-2 text-xs font-semibold border transition ${
+                  jenis === "PEMASUKAN"
+                    ? "border-emerald-600 bg-emerald-50 text-emerald-800"
+                    : "border-stone-200 bg-white text-stone-600"
+                }`}
+              >
+                Penerimaan Panen (+)
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSwitchJenis("PENGELUARAN")}
+                className={`rounded-xl py-2 text-xs font-semibold border transition ${
+                  jenis === "PENGELUARAN"
+                    ? "border-rose-600 bg-rose-50 text-rose-800"
+                    : "border-stone-200 bg-white text-stone-600"
+                }`}
+              >
+                Biaya PESAT / Keluar (-)
+              </button>
+            </div>
+          )}
 
           {/* Pilihan Cepat Kategori */}
           <div className="flex flex-wrap gap-1.5">
@@ -325,7 +374,9 @@ export function KeuanganPage() {
                 onClick={() => setKategori(label)}
                 className={`rounded-full px-2.5 py-1 text-[11px] font-medium border transition ${
                   kategori === label
-                    ? "border-emerald-700 bg-emerald-700 text-white"
+                    ? jenis === "PENGELUARAN"
+                      ? "border-rose-700 bg-rose-700 text-white"
+                      : "border-emerald-700 bg-emerald-700 text-white"
                     : "border-stone-200 bg-stone-50 text-stone-700 hover:bg-stone-100"
                 }`}
               >
@@ -344,7 +395,11 @@ export function KeuanganPage() {
                 required
                 value={kategori}
                 onChange={(e) => setKategori(e.target.value)}
-                placeholder="Contoh: Penjualan Panen"
+                placeholder={
+                  jenis === "PENGELUARAN"
+                    ? "Contoh: Pupuk, Tenaga Kerja"
+                    : "Contoh: Penjualan Panen"
+                }
                 className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
               />
             </div>
@@ -386,7 +441,7 @@ export function KeuanganPage() {
                 type="text"
                 value={keterangan}
                 onChange={(e) => setKeterangan(e.target.value)}
-                placeholder="Opsional"
+                placeholder="Contoh: Upah pembersihan lahan"
                 className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-emerald-600 focus:outline-none"
               />
             </div>
@@ -395,9 +450,17 @@ export function KeuanganPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full rounded-xl bg-emerald-600 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+            className={`w-full rounded-xl py-2.5 text-sm font-semibold text-white disabled:opacity-60 ${
+              jenis === "PENGELUARAN"
+                ? "bg-rose-600 hover:bg-rose-700"
+                : "bg-emerald-600 hover:bg-emerald-700"
+            }`}
           >
-            {submitting ? "Menyimpan..." : "Simpan Transaksi"}
+            {submitting
+              ? "Menyimpan..."
+              : jenis === "PENGELUARAN"
+              ? "Simpan Pengeluaran"
+              : "Simpan Transaksi"}
           </button>
         </form>
       )}
@@ -437,7 +500,7 @@ export function KeuanganPage() {
             Belum ada transaksi
           </p>
           <p className="text-xs text-stone-500">
-            Catat penerimaan hasil panen atau biaya PESAT melalui tombol "+ Catat Kas".
+            Catat penerimaan hasil panen atau pengeluaran melalui tombol di atas.
           </p>
         </div>
       ) : (
